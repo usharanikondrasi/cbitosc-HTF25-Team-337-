@@ -1,0 +1,1884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusConnect - College Club & Event Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #f59e0b;
+            --accent: #10b981;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --gray: #6b7280;
+            --light-gray: #e5e7eb;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --warning: #f59e0b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fb;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            background: white;
+            color: var(--dark);
+            padding: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .logo i {
+            font-size: 1.8rem;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+        }
+        
+        nav a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            padding: 0.5rem 0.8rem;
+            border-radius: 8px;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 4rem 0;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+        
+        .search-bar {
+            max-width: 600px;
+            margin: 2rem auto;
+            display: flex;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .search-bar input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .search-bar button {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 0 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Main Content */
+        .main-content {
+            padding: 3rem 0;
+        }
+        
+        .section-title {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-title h2 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+        
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        /* Cards Layout */
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-img {
+            height: 160px;
+            background-color: var(--light-gray);
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
+        
+        .card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+        
+        .card p {
+            color: var(--gray);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tag.tech {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .tag.sports {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        
+        .tag.arts {
+            background-color: #f3e8ff;
+            color: #7e22ce;
+        }
+        
+        .tag.academic {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        /* Features Section */
+        .features {
+            background-color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature-card {
+            padding: 2rem 1rem;
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 1.8rem;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 1rem;
+        }
+        
+        /* Dashboard Styles */
+        .dashboard {
+            display: none;
+            padding: 2rem 0;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .dashboard-nav {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .dashboard-nav button {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--gray);
+            border-bottom: 3px solid transparent;
+        }
+        
+        .dashboard-nav button.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+        
+        .dashboard-section {
+            display: none;
+        }
+        
+        .dashboard-section.active {
+            display: block;
+        }
+        
+        /* Form Styles */
+        .form-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* QR Code Styles */
+        .qr-container {
+            text-align: center;
+            padding: 2rem;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+        }
+        
+        #qrcode {
+            display: inline-block;
+            margin: 1rem 0;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        /* Notification Styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 1100;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+        
+        .notification.success {
+            background-color: var(--success);
+        }
+        
+        .notification.error {
+            background-color: var(--danger);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 2px;
+            background-color: var(--accent);
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-column a {
+            color: #adb5bd;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-column a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: #374151;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid #374151;
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-nav {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-university"></i>
+                    <span>CampusConnect</span>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="active" id="nav-home">Home</a></li>
+                        <li><a href="#" id="nav-clubs">Clubs</a></li>
+                        <li><a href="#" id="nav-events">Events</a></li>
+                        <li><a href="#" id="nav-dashboard">Dashboard</a></li>
+                        <li><a href="#" id="nav-admin">Admin</a></li>
+                    </ul>
+                </nav>
+                <div class="user-actions">
+                    <button class="btn btn-outline" id="login-btn"><i class="fas fa-sign-in-alt"></i> Login</button>
+                    <button class="btn btn-primary" id="signup-btn"><i class="fas fa-user-plus"></i> Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home-section">
+        <div class="container">
+            <h1>Your Campus Activities Hub</h1>
+            <p>Discover, join, and manage college clubs and events all in one place. Stay connected with your campus community.</p>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search for clubs, events, or activities...">
+                <button id="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <div>
+                <button class="btn btn-primary" id="create-club-btn"><i class="fas fa-plus"></i> Create a Club</button>
+                <button class="btn btn-secondary" id="add-event-btn"><i class="far fa-calendar-plus"></i> Add Event</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container main-content" id="main-content">
+        <!-- Featured Clubs Section -->
+        <section id="clubs-section">
+            <div class="section-title">
+                <h2>Featured Clubs</h2>
+                <a href="#" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
+            </div>
+            <div class="cards-container" id="clubs-container">
+                <!-- Clubs will be dynamically added here -->
+            </div>
+        </section>
+
+        <!-- Upcoming Events Section -->
+        <section id="events-section">
+            <div class="section-title">
+                <h2>Upcoming Events</h2>
+                <a href="#" class="view-all">View All <i class="fas fa-chevron-right"></i></a>
+            </div>
+            <div class="cards-container" id="events-container">
+                <!-- Events will be dynamically added here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Dashboard Section -->
+    <div class="container dashboard" id="dashboard-section">
+        <div class="dashboard-header">
+            <h2>My Dashboard</h2>
+            <div>
+                <button class="btn btn-primary" id="refresh-dashboard"><i class="fas fa-sync-alt"></i> Refresh</button>
+            </div>
+        </div>
+        
+        <div class="dashboard-nav">
+            <button class="active" data-section="my-clubs">My Clubs</button>
+            <button data-section="my-events">My Events</button>
+            <button data-section="create-content">Create Content</button>
+            <button data-section="qr-checkin">QR Check-in</button>
+        </div>
+        
+        <div class="dashboard-section active" id="my-clubs">
+            <h3>Clubs I've Joined</h3>
+            <div class="cards-container" id="my-clubs-container">
+                <!-- User's clubs will be dynamically added here -->
+            </div>
+        </div>
+        
+        <div class="dashboard-section" id="my-events">
+            <h3>Events I'm Attending</h3>
+            <div class="cards-container" id="my-events-container">
+                <!-- User's events will be dynamically added here -->
+            </div>
+        </div>
+        
+        <div class="dashboard-section" id="create-content">
+            <div class="form-container">
+                <h3>Create New Club</h3>
+                <form id="create-club-form">
+                    <div class="form-group">
+                        <label for="club-name">Club Name</label>
+                        <input type="text" id="club-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="club-description">Description</label>
+                        <textarea id="club-description" class="form-control" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="club-category">Category</label>
+                        <select id="club-category" class="form-control" required>
+                            <option value="">Select a category</option>
+                            <option value="tech">Technology</option>
+                            <option value="arts">Arts</option>
+                            <option value="sports">Sports</option>
+                            <option value="academic">Academic</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="club-image">Image URL</label>
+                        <input type="text" id="club-image" class="form-control" placeholder="https://example.com/image.jpg">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Club</button>
+                </form>
+            </div>
+            
+            <div class="form-container">
+                <h3>Create New Event</h3>
+                <form id="create-event-form">
+                    <div class="form-group">
+                        <label for="event-name">Event Name</label>
+                        <input type="text" id="event-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-description">Description</label>
+                        <textarea id="event-description" class="form-control" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-date">Date & Time</label>
+                        <input type="datetime-local" id="event-date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-location">Location</label>
+                        <input type="text" id="event-location" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-club">Associated Club</label>
+                        <select id="event-club" class="form-control" required>
+                            <option value="">Select a club</option>
+                            <!-- Clubs will be dynamically added here -->
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Event</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="dashboard-section" id="qr-checkin">
+            <div class="qr-container">
+                <h3>Event Check-in QR Code</h3>
+                <p>Scan this QR code to check in to an event</p>
+                <div id="qrcode"></div>
+                <p>Event: <span id="qr-event-name">Hackathon 2023</span></p>
+                <button class="btn btn-primary" id="generate-qr">Generate New QR Code</button>
+            </div>
+            
+            <div class="form-container">
+                <h3>Manual Check-in</h3>
+                <form id="manual-checkin-form">
+                    <div class="form-group">
+                        <label for="checkin-event">Select Event</label>
+                        <select id="checkin-event" class="form-control" required>
+                            <option value="">Select an event</option>
+                            <!-- Events will be dynamically added here -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="checkin-student">Student ID</label>
+                        <input type="text" id="checkin-student" class="form-control" placeholder="Enter student ID" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Check In</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Section -->
+    <div class="container dashboard" id="admin-section">
+        <div class="dashboard-header">
+            <h2>Admin Dashboard</h2>
+        </div>
+        
+        <div class="dashboard-nav">
+            <button class="active" data-section="admin-clubs">Manage Clubs</button>
+            <button data-section="admin-events">Manage Events</button>
+            <button data-section="admin-users">User Management</button>
+        </div>
+        
+        <div class="dashboard-section active" id="admin-clubs">
+            <h3>All Clubs</h3>
+            <div class="cards-container" id="admin-clubs-container">
+                <!-- All clubs for admin management -->
+            </div>
+        </div>
+        
+        <div class="dashboard-section" id="admin-events">
+            <h3>All Events</h3>
+            <div class="cards-container" id="admin-events-container">
+                <!-- All events for admin management -->
+            </div>
+        </div>
+        
+        <div class="dashboard-section" id="admin-users">
+            <h3>User Management</h3>
+            <div class="form-container">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: var(--light-gray);">
+                            <th style="padding: 1rem; text-align: left;">User ID</th>
+                            <th style="padding: 1rem; text-align: left;">Name</th>
+                            <th style="padding: 1rem; text-align: left;">Role</th>
+                            <th style="padding: 1rem; text-align: left;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table">
+                        <!-- Users will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2>How CampusConnect Works</h2>
+            <p>Our platform makes it easy to discover and engage with campus activities</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>Discover Clubs & Events</h3>
+                    <p>Browse through all campus organizations and upcoming events in one place.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Personalized Notifications</h3>
+                    <p>Get alerts for events from clubs you follow and activities that match your interests.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <h3>QR Code Check-ins</h3>
+                    <p>Easy event attendance tracking with QR code scanning technology.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h3>Manage Your Involvement</h3>
+                    <p>Keep track of your club memberships, event registrations, and attendance history.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>CampusConnect</h3>
+                    <p>Your central hub for all college clubs, events, and campus activities.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#" class="nav-link" data-target="home">Home</a></li>
+                        <li><a href="#" class="nav-link" data-target="clubs">All Clubs</a></li>
+                        <li><a href="#" class="nav-link" data-target="events">Events Calendar</a></li>
+                        <li><a href="#" class="nav-link" data-target="dashboard">Dashboard</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#" id="footer-create-club">Start a Club</a></li>
+                        <li><a href="#">Event Guidelines</a></li>
+                        <li><a href="#">Leadership Resources</a></li>
+                        <li><a href="#" class="nav-link" data-target="admin">Admin Portal</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact Us</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> Student Center, Room 205</li>
+                        <li><i class="fas fa-phone"></i> (555) 123-4567</li>
+                        <li><i class="fas fa-envelope"></i> campusconnect@university.edu</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 CampusConnect. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h2>Login to CampusConnect</h2>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">Don't have an account? <a href="#" id="switch-to-signup">Sign up</a></p>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div class="modal" id="signup-modal">
+        <div class="modal-content">
+            <button class="close-modal">&times;</button>
+            <h2>Create an Account</h2>
+            <form id="signup-form">
+                <div class="form-group">
+                    <label for="signup-name">Full Name</label>
+                    <input type="text" id="signup-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-email">Email</label>
+                    <input type="email" id="signup-email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-password">Password</label>
+                    <input type="password" id="signup-password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="signup-role">I am a:</label>
+                    <select id="signup-role" class="form-control" required>
+                        <option value="student">Student</option>
+                        <option value="club_leader">Club Leader</option>
+                        <option value="admin">Administrator</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">Already have an account? <a href="#" id="switch-to-login">Login</a></p>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // Simplified CampusConnect App
+        class CampusConnect {
+            constructor() {
+                this.users = JSON.parse(localStorage.getItem('users')) || [];
+                this.clubs = JSON.parse(localStorage.getItem('clubs')) || [];
+                this.events = JSON.parse(localStorage.getItem('events')) || [];
+                this.currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
+                
+                this.initSampleData();
+                this.initEventListeners();
+                this.renderHomepage();
+            }
+            
+            initSampleData() {
+                if (this.clubs.length === 0) {
+                    this.clubs = [
+                        {
+                            id: 1,
+                            name: "Computer Science Society",
+                            description: "Join our community of developers, programmers, and tech enthusiasts.",
+                            category: "tech",
+                            members: 245,
+                            events: 12,
+                            image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                            createdBy: 1
+                        },
+                        {
+                            id: 2,
+                            name: "Photography Club",
+                            description: "Capture moments, learn techniques, and explore the art of photography.",
+                            category: "arts",
+                            members: 128,
+                            events: 8,
+                            image: "https://images.unsplash.com/photo-1549060279-7e168fce7090?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                            createdBy: 2
+                        },
+                        {
+                            id: 3,
+                            name: "Basketball Team",
+                            description: "Practice, compete, and improve your basketball skills with our team.",
+                            category: "sports",
+                            members: 32,
+                            events: 15,
+                            image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80",
+                            createdBy: 3
+                        }
+                    ];
+                    this.saveData('clubs', this.clubs);
+                }
+                
+                if (this.events.length === 0) {
+                    this.events = [
+                        {
+                            id: 1,
+                            name: "Hackathon 2023",
+                            description: "48-hour coding competition with prizes and networking opportunities.",
+                            date: "2023-10-15T09:00",
+                            location: "Tech Building",
+                            clubId: 1,
+                            attendees: [],
+                            image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                        },
+                        {
+                            id: 2,
+                            name: "Photography Exhibition",
+                            description: "Showcase your best shots and get feedback from professional photographers.",
+                            date: "2023-11-05T14:00",
+                            location: "Arts Center",
+                            clubId: 2,
+                            attendees: [],
+                            image: "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                        },
+                        {
+                            id: 3,
+                            name: "Basketball Tournament",
+                            description: "Intramural basketball tournament with teams from across campus.",
+                            date: "2023-10-22T10:00",
+                            location: "Main Gym",
+                            clubId: 3,
+                            attendees: [],
+                            image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80"
+                        }
+                    ];
+                    this.saveData('events', this.events);
+                }
+                
+                if (this.users.length === 0) {
+                    this.users = [
+                        { id: 1, name: "Admin User", email: "admin@campus.edu", password: "admin123", role: "admin", joinedClubs: [], registeredEvents: [] },
+                        { id: 2, name: "John Doe", email: "john@campus.edu", password: "john123", role: "student", joinedClubs: [1], registeredEvents: [1] },
+                        { id: 3, name: "Jane Smith", email: "jane@campus.edu", password: "jane123", role: "club_leader", joinedClubs: [2], registeredEvents: [2] }
+                    ];
+                    this.saveData('users', this.users);
+                }
+            }
+            
+            saveData(key, data) {
+                localStorage.setItem(key, JSON.stringify(data));
+            }
+            
+            initEventListeners() {
+                // Navigation
+                document.getElementById('nav-home').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.showSection('home');
+                });
+                
+                document.getElementById('nav-clubs').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.showSection('clubs');
+                });
+                
+                document.getElementById('nav-events').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.showSection('events');
+                });
+                
+                document.getElementById('nav-dashboard').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.showSection('dashboard');
+                });
+                
+                document.getElementById('nav-admin').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.showSection('admin');
+                });
+                
+                // Auth buttons
+                document.getElementById('login-btn').addEventListener('click', () => this.showModal('login-modal'));
+                document.getElementById('signup-btn').addEventListener('click', () => this.showModal('signup-modal'));
+                
+                // Forms
+                document.getElementById('login-form').addEventListener('submit', (e) => this.handleLogin(e));
+                document.getElementById('signup-form').addEventListener('submit', (e) => this.handleSignup(e));
+                document.getElementById('create-club-form').addEventListener('submit', (e) => this.handleCreateClub(e));
+                document.getElementById('create-event-form').addEventListener('submit', (e) => this.handleCreateEvent(e));
+                
+                // Search
+                document.getElementById('search-btn').addEventListener('click', () => this.performSearch());
+                document.getElementById('search-input').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.performSearch();
+                });
+                
+                // QR Code
+                document.getElementById('generate-qr').addEventListener('click', () => this.generateQRCode());
+                
+                // Dashboard refresh
+                document.getElementById('refresh-dashboard').addEventListener('click', () => this.loadDashboard());
+                
+                // Modal controls
+                document.querySelectorAll('.close-modal').forEach(btn => {
+                    btn.addEventListener('click', () => this.hideModals());
+                });
+                
+                document.getElementById('switch-to-signup').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.hideModals();
+                    this.showModal('signup-modal');
+                });
+                
+                document.getElementById('switch-to-login').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.hideModals();
+                    this.showModal('login-modal');
+                });
+                
+                // Dashboard navigation
+                document.querySelectorAll('.dashboard-nav button').forEach(button => {
+                    button.addEventListener('click', function() {
+                        document.querySelectorAll('.dashboard-nav button').forEach(btn => {
+                            btn.classList.remove('active');
+                        });
+                        this.classList.add('active');
+                        
+                        document.querySelectorAll('.dashboard-section').forEach(section => {
+                            section.classList.remove('active');
+                        });
+                        
+                        const sectionId = this.getAttribute('data-section');
+                        document.getElementById(sectionId).classList.add('active');
+                    });
+                });
+                
+                // Footer navigation
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const target = e.target.getAttribute('data-target');
+                        this.showSection(target);
+                    });
+                });
+            }
+            
+            showSection(section) {
+                document.querySelectorAll('nav a').forEach(link => {
+                    link.classList.remove('active');
+                });
+                
+                document.getElementById('main-content').style.display = 'none';
+                document.getElementById('dashboard-section').style.display = 'none';
+                document.getElementById('admin-section').style.display = 'none';
+                document.getElementById('home-section').style.display = 'none';
+                
+                if (section === 'home') {
+                    document.getElementById('home-section').style.display = 'block';
+                    document.getElementById('main-content').style.display = 'block';
+                    document.getElementById('nav-home').classList.add('active');
+                } else if (section === 'clubs') {
+                    document.getElementById('main-content').style.display = 'block';
+                    document.getElementById('clubs-section').scrollIntoView();
+                    document.getElementById('nav-clubs').classList.add('active');
+                } else if (section === 'events') {
+                    document.getElementById('main-content').style.display = 'block';
+                    document.getElementById('events-section').scrollIntoView();
+                    document.getElementById('nav-events').classList.add('active');
+                } else if (section === 'dashboard') {
+                    if (!this.currentUser) {
+                        this.showNotification('Please log in to access your dashboard', 'error');
+                        this.showModal('login-modal');
+                        return;
+                    }
+                    document.getElementById('dashboard-section').style.display = 'block';
+                    document.getElementById('nav-dashboard').classList.add('active');
+                    this.loadDashboard();
+                } else if (section === 'admin') {
+                    if (!this.currentUser || this.currentUser.role !== 'admin') {
+                        this.showNotification('Admin access required', 'error');
+                        return;
+                    }
+                    document.getElementById('admin-section').style.display = 'block';
+                    document.getElementById('nav-admin').classList.add('active');
+                    this.loadAdminPanel();
+                }
+            }
+            
+            showModal(modalId) {
+                document.getElementById(modalId).style.display = 'flex';
+            }
+            
+            hideModals() {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.style.display = 'none';
+                });
+            }
+            
+            showNotification(message, type = 'success') {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.className = `notification ${type}`;
+                notification.style.display = 'block';
+                
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
+            
+            renderHomepage() {
+                this.renderClubs(document.getElementById('clubs-container'), this.clubs);
+                this.renderEvents(document.getElementById('events-container'), this.events);
+            }
+            
+            renderClubs(container, clubsToRender, showJoinButton = true) {
+                container.innerHTML = '';
+                
+                clubsToRender.forEach(club => {
+                    const categoryClass = club.category;
+                    const isMember = this.currentUser && this.currentUser.joinedClubs.includes(club.id);
+                    
+                    const clubCard = document.createElement('div');
+                    clubCard.className = 'card';
+                    clubCard.innerHTML = `
+                        <div class="card-img" style="background-image: url('${club.image}')"></div>
+                        <div class="card-content">
+                            <h3>${club.name}</h3>
+                            <p>${club.description}</p>
+                            <div class="card-meta">
+                                <span><i class="fas fa-users"></i> ${club.members} Members</span>
+                                <span><i class="fas fa-calendar-alt"></i> ${club.events} Events</span>
+                            </div>
+                            <div class="tags">
+                                <span class="tag ${categoryClass}">${club.category.charAt(0).toUpperCase() + club.category.slice(1)}</span>
+                            </div>
+                            <div class="card-actions">
+                                ${showJoinButton ? 
+                                    `<button class="btn ${isMember ? 'btn-success' : 'btn-primary'}" data-club-id="${club.id}">
+                                        ${isMember ? 'Joined' : 'Join Club'}
+                                    </button>` : 
+                                    `<button class="btn btn-danger delete-club" data-club-id="${club.id}">Delete</button>`
+                                }
+                                <button class="btn btn-outline view-club-details" data-club-id="${club.id}">View Details</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(clubCard);
+                });
+                
+                // Add event listeners
+                if (showJoinButton) {
+                    container.querySelectorAll('.btn-primary, .btn-success').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            const clubId = parseInt(e.target.getAttribute('data-club-id'));
+                            this.toggleClubMembership(clubId);
+                        });
+                    });
+                } else {
+                    container.querySelectorAll('.delete-club').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            const clubId = parseInt(e.target.getAttribute('data-club-id'));
+                            this.deleteClub(clubId);
+                        });
+                    });
+                }
+            }
+            
+            renderEvents(container, eventsToRender, showRegisterButton = true) {
+                container.innerHTML = '';
+                
+                eventsToRender.forEach(event => {
+                    const club = this.clubs.find(c => c.id === event.clubId);
+                    const eventDate = new Date(event.date);
+                    const formattedDate = eventDate.toLocaleDateString() + ' ' + eventDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    const isRegistered = this.currentUser && this.currentUser.registeredEvents.includes(event.id);
+                    
+                    const eventCard = document.createElement('div');
+                    eventCard.className = 'card';
+                    eventCard.innerHTML = `
+                        <div class="card-img" style="background-image: url('${event.image}')"></div>
+                        <div class="card-content">
+                            <h3>${event.name}</h3>
+                            <p>${event.description}</p>
+                            <div class="card-meta">
+                                <span><i class="far fa-calendar"></i> ${formattedDate}</span>
+                                <span><i class="fas fa-map-marker-alt"></i> ${event.location}</span>
+                            </div>
+                            <div class="tags">
+                                <span class="tag">${club ? club.name : 'Unknown Club'}</span>
+                            </div>
+                            <div class="card-actions">
+                                ${showRegisterButton ? 
+                                    `<button class="btn ${isRegistered ? 'btn-success' : 'btn-primary'}" data-event-id="${event.id}">
+                                        ${isRegistered ? 'Registered' : 'Register'}
+                                    </button>` : 
+                                    `<button class="btn btn-danger delete-event" data-event-id="${event.id}">Delete</button>`
+                                }
+                                <button class="btn btn-outline add-to-calendar" data-event-id="${event.id}">Add to Calendar</button>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(eventCard);
+                });
+                
+                // Add event listeners
+                if (showRegisterButton) {
+                    container.querySelectorAll('.btn-primary, .btn-success').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            const eventId = parseInt(e.target.getAttribute('data-event-id'));
+                            this.toggleEventRegistration(eventId);
+                        });
+                    });
+                } else {
+                    container.querySelectorAll('.delete-event').forEach(button => {
+                        button.addEventListener('click', (e) => {
+                            const eventId = parseInt(e.target.getAttribute('data-event-id'));
+                            this.deleteEvent(eventId);
+                        });
+                    });
+                }
+            }
+            
+            toggleClubMembership(clubId) {
+                if (!this.currentUser) {
+                    this.showNotification('Please log in to join clubs', 'error');
+                    this.showModal('login-modal');
+                    return;
+                }
+                
+                const clubIndex = this.clubs.findIndex(c => c.id === clubId);
+                if (clubIndex === -1) return;
+                
+                const userIndex = this.users.findIndex(u => u.id === this.currentUser.id);
+                if (userIndex === -1) return;
+                
+                if (this.currentUser.joinedClubs.includes(clubId)) {
+                    // Leave club
+                    this.currentUser.joinedClubs = this.currentUser.joinedClubs.filter(id => id !== clubId);
+                    this.clubs[clubIndex].members--;
+                    this.showNotification(`You left ${this.clubs[clubIndex].name}`);
+                } else {
+                    // Join club
+                    this.currentUser.joinedClubs.push(clubId);
+                    this.clubs[clubIndex].members++;
+                    this.showNotification(`You joined ${this.clubs[clubIndex].name}`);
+                }
+                
+                // Update data
+                this.users[userIndex] = this.currentUser;
+                this.saveData('users', this.users);
+                this.saveData('currentUser', this.currentUser);
+                this.saveData('clubs', this.clubs);
+                
+                // Refresh displays
+                this.renderClubs(document.getElementById('clubs-container'), this.clubs);
+                if (document.getElementById('dashboard-section').style.display === 'block') {
+                    this.loadDashboard();
+                }
+            }
+            
+            toggleEventRegistration(eventId) {
+                if (!this.currentUser) {
+                    this.showNotification('Please log in to register for events', 'error');
+                    this.showModal('login-modal');
+                    return;
+                }
+                
+                const eventIndex = this.events.findIndex(e => e.id === eventId);
+                if (eventIndex === -1) return;
+                
+                const userIndex = this.users.findIndex(u => u.id === this.currentUser.id);
+                if (userIndex === -1) return;
+                
+                if (this.currentUser.registeredEvents.includes(eventId)) {
+                    // Unregister from event
+                    this.currentUser.registeredEvents = this.currentUser.registeredEvents.filter(id => id !== eventId);
+                    this.events[eventIndex].attendees = this.events[eventIndex].attendees.filter(id => id !== this.currentUser.id);
+                    this.showNotification(`You unregistered from ${this.events[eventIndex].name}`);
+                } else {
+                    // Register for event
+                    this.currentUser.registeredEvents.push(eventId);
+                    this.events[eventIndex].attendees.push(this.currentUser.id);
+                    this.showNotification(`You registered for ${this.events[eventIndex].name}`);
+                }
+                
+                // Update data
+                this.users[userIndex] = this.currentUser;
+                this.saveData('users', this.users);
+                this.saveData('currentUser', this.currentUser);
+                this.saveData('events', this.events);
+                
+                // Refresh displays
+                this.renderEvents(document.getElementById('events-container'), this.events);
+                if (document.getElementById('dashboard-section').style.display === 'block') {
+                    this.loadDashboard();
+                }
+            }
+            
+            loadDashboard() {
+                // Load user's clubs
+                const userClubs = this.clubs.filter(club => this.currentUser.joinedClubs.includes(club.id));
+                this.renderClubs(document.getElementById('my-clubs-container'), userClubs, false);
+                
+                // Load user's events
+                const userEvents = this.events.filter(event => this.currentUser.registeredEvents.includes(event.id));
+                this.renderEvents(document.getElementById('my-events-container'), userEvents, false);
+                
+                // Populate club select for event creation
+                const eventClubSelect = document.getElementById('event-club');
+                eventClubSelect.innerHTML = '<option value="">Select a club</option>';
+                userClubs.forEach(club => {
+                    const option = document.createElement('option');
+                    option.value = club.id;
+                    option.textContent = club.name;
+                    eventClubSelect.appendChild(option);
+                });
+                
+                // Populate event select for check-in
+                const checkinEventSelect = document.getElementById('checkin-event');
+                checkinEventSelect.innerHTML = '<option value="">Select an event</option>';
+                userEvents.forEach(event => {
+                    const option = document.createElement('option');
+                    option.value = event.id;
+                    option.textContent = event.name;
+                    checkinEventSelect.appendChild(option);
+                });
+                
+                // Generate QR code for first event (if any)
+                if (userEvents.length > 0) {
+                    this.generateQRCode(userEvents[0].id);
+                }
+            }
+            
+            loadAdminPanel() {
+                this.renderClubs(document.getElementById('admin-clubs-container'), this.clubs, false);
+                this.renderEvents(document.getElementById('admin-events-container'), this.events, false);
+                
+                // Load users table
+                const usersTable = document.getElementById('users-table');
+                usersTable.innerHTML = '';
+                
+                this.users.forEach(user => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td style="padding: 1rem;">${user.id}</td>
+                        <td style="padding: 1rem;">${user.name}</td>
+                        <td style="padding: 1rem;">${user.role}</td>
+                        <td style="padding: 1rem;">
+                            <button class="btn btn-danger btn-sm delete-user" data-user-id="${user.id}">Delete</button>
+                        </td>
+                    `;
+                    usersTable.appendChild(row);
+                });
+                
+                // Add event listeners for delete user buttons
+                usersTable.querySelectorAll('.delete-user').forEach(button => {
+                    button.addEventListener('click', (e) => {
+                        const userId = parseInt(e.target.getAttribute('data-user-id'));
+                        if (userId === this.currentUser.id) {
+                            this.showNotification('You cannot delete your own account', 'error');
+                            return;
+                        }
+                        this.deleteUser(userId);
+                    });
+                });
+            }
+            
+            generateQRCode(eventId = null) {
+                if (!eventId) {
+                    const checkinEventSelect = document.getElementById('checkin-event');
+                    eventId = parseInt(checkinEventSelect.value);
+                    if (!eventId) {
+                        this.showNotification('Please select an event first', 'error');
+                        return;
+                    }
+                }
+                
+                const event = this.events.find(e => e.id === eventId);
+                if (!event) return;
+                
+                document.getElementById('qr-event-name').textContent = event.name;
+                
+                const qrContainer = document.getElementById('qrcode');
+                qrContainer.innerHTML = '';
+                
+                // In a real application, this would be a URL to a check-in endpoint
+                const checkinData = JSON.stringify({
+                    eventId: eventId,
+                    eventName: event.name,
+                    timestamp: new Date().toISOString()
+                });
+                
+                QRCode.toCanvas(qrContainer, checkinData, function(error) {
+                    if (error) console.error(error);
+                });
+            }
+            
+            handleLogin(e) {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                const user = this.users.find(u => u.email === email && u.password === password);
+                if (user) {
+                    this.currentUser = user;
+                    this.saveData('currentUser', this.currentUser);
+                    this.showNotification(`Welcome back, ${user.name}!`);
+                    this.hideModals();
+                    
+                    // Update UI based on login
+                    if (user.role === 'admin') {
+                        document.getElementById('nav-admin').style.display = 'block';
+                    } else {
+                        document.getElementById('nav-admin').style.display = 'none';
+                    }
+                    
+                    // Refresh any visible content
+                    this.renderHomepage();
+                } else {
+                    this.showNotification('Invalid email or password', 'error');
+                }
+            }
+            
+            handleSignup(e) {
+                e.preventDefault();
+                const name = document.getElementById('signup-name').value;
+                const email = document.getElementById('signup-email').value;
+                const password = document.getElementById('signup-password').value;
+                const role = document.getElementById('signup-role').value;
+                
+                // Check if user already exists
+                if (this.users.find(u => u.email === email)) {
+                    this.showNotification('User with this email already exists', 'error');
+                    return;
+                }
+                
+                const newUser = {
+                    id: this.users.length > 0 ? Math.max(...this.users.map(u => u.id)) + 1 : 1,
+                    name,
+                    email,
+                    password,
+                    role,
+                    joinedClubs: [],
+                    registeredEvents: []
+                };
+                
+                this.users.push(newUser);
+                this.saveData('users', this.users);
+                
+                this.currentUser = newUser;
+                this.saveData('currentUser', this.currentUser);
+                
+                this.showNotification(`Account created successfully! Welcome, ${name}`);
+                this.hideModals();
+                
+                // Update UI based on registration
+                if (newUser.role === 'admin') {
+                    document.getElementById('nav-admin').style.display = 'block';
+                } else {
+                    document.getElementById('nav-admin').style.display = 'none';
+                }
+                
+                // Refresh any visible content
+                this.renderHomepage();
+            }
+            
+            handleCreateClub(e) {
+                e.preventDefault();
+                const name = document.getElementById('club-name').value;
+                const description = document.getElementById('club-description').value;
+                const category = document.getElementById('club-category').value;
+                const image = document.getElementById('club-image').value;
+                
+                this.createNewClub({ name, description, category, image });
+                e.target.reset();
+            }
+            
+            createNewClub(clubData) {
+                const newClub = {
+                    id: this.clubs.length > 0 ? Math.max(...this.clubs.map(c => c.id)) + 1 : 1,
+                    name: clubData.name,
+                    description: clubData.description,
+                    category: clubData.category,
+                    members: 1, // The creator is automatically a member
+                    events: 0,
+                    image: clubData.image || 'https://images.unsplash.com/photo-1562813733-b31f71025d54?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80',
+                    createdBy: this.currentUser.id
+                };
+                
+                this.clubs.push(newClub);
+                this.saveData('clubs', this.clubs);
+                
+                // Add creator as a member
+                this.currentUser.joinedClubs.push(newClub.id);
+                const userIndex = this.users.findIndex(u => u.id === this.currentUser.id);
+                this.users[userIndex] = this.currentUser;
+                this.saveData('users', this.users);
+                this.saveData('currentUser', this.currentUser);
+                
+                this.showNotification(`Club "${newClub.name}" created successfully`);
+                
+                // Refresh displays
+                this.renderHomepage();
+                if (document.getElementById('dashboard-section').style.display === 'block') {
+                    this.loadDashboard();
+                }
+                
+                return newClub;
+            }
+            
+            handleCreateEvent(e) {
+                e.preventDefault();
+                const name = document.getElementById('event-name').value;
+                const description = document.getElementById('event-description').value;
+                const date = document.getElementById('event-date').value;
+                const location = document.getElementById('event-location').value;
+                const clubId = document.getElementById('event-club').value;
+                
+                this.createNewEvent({ name, description, date, location, clubId });
+                e.target.reset();
+            }
+            
+            createNewEvent(eventData) {
+                const newEvent = {
+                    id: this.events.length > 0 ? Math.max(...this.events.map(e => e.id)) + 1 : 1,
+                    name: eventData.name,
+                    description: eventData.description,
+                    date: eventData.date,
+                    location: eventData.location,
+                    clubId: parseInt(eventData.clubId),
+                    attendees: [this.currentUser.id], // The creator is automatically registered
+                    image: 'https://images.unsplash.com/photo-1501281668745-f7f57925c3b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80'
+                };
+                
+                this.events.push(newEvent);
+                this.saveData('events', this.events);
+                
+                // Add creator as registered
+                this.currentUser.registeredEvents.push(newEvent.id);
+                const userIndex = this.users.findIndex(u => u.id === this.currentUser.id);
+                this.users[userIndex] = this.currentUser;
+                this.saveData('users', this.users);
+                this.saveData('currentUser', this.currentUser);
+                
+                // Update club event count
+                const clubIndex = this.clubs.findIndex(c => c.id === parseInt(eventData.clubId));
+                if (clubIndex !== -1) {
+                    this.clubs[clubIndex].events++;
+                    this.saveData('clubs', this.clubs);
+                }
+                
+                this.showNotification(`Event "${newEvent.name}" created successfully`);
+                
+                // Refresh displays
+                this.renderHomepage();
+                if (document.getElementById('dashboard-section').style.display === 'block') {
+                    this.loadDashboard();
+                }
+                
+                return newEvent;
+            }
+            
+            performSearch() {
+                const query = document.getElementById('search-input').value.toLowerCase().trim();
+                if (query === '') {
+                    this.renderHomepage();
+                    return;
+                }
+                
+                const filteredClubs = this.clubs.filter(club => 
+                    club.name.toLowerCase().includes(query) || 
+                    club.description.toLowerCase().includes(query) ||
+                    club.category.toLowerCase().includes(query)
+                );
+                
+                const filteredEvents = this.events.filter(event => 
+                    event.name.toLowerCase().includes(query) || 
+                    event.description.toLowerCase().includes(query) ||
+                    event.location.toLowerCase().includes(query)
+                );
+                
+                this.renderClubs(document.getElementById('clubs-container'), filteredClubs);
+                this.renderEvents(document.getElementById('events-container'), filteredEvents);
+                
+                if (filteredClubs.length === 0 && filteredEvents.length === 0) {
+                    this.showNotification('No results found for your search', 'error');
+                }
+            }
+            
+            deleteClub(clubId) {
+                if (!this.currentUser || (this.currentUser.role !== 'admin' && this.currentUser.id !== this.clubs.find(c => c.id === clubId).createdBy)) {
+                    this.showNotification('You do not have permission to delete this club', 'error');
+                    return;
+                }
+                
+                const clubIndex = this.clubs.findIndex(c => c.id === clubId);
+                if (clubIndex === -1) return;
+                
+                const clubName = this.clubs[clubIndex].name;
+                
+                // Remove club from all users' joined clubs
+                this.users.forEach(user => {
+                    user.joinedClubs = user.joinedClubs.filter(id => id !== clubId);
+                });
+                
+                // Remove events associated with this club
+                this.events = this.events.filter(event => event.clubId !== clubId);
+                
+                // Remove the club
+                this.clubs.splice(clubIndex, 1);
+                
+                // Update data
+                this.saveData('users', this.users);
+                this.saveData('clubs', this.clubs);
+                this.saveData('events', this.events);
+                
+                // Update current user if needed
+                if (this.currentUser) {
+                    this.currentUser.joinedClubs = this.currentUser.joinedClubs.filter(id => id !== clubId);
+                    this.saveData('currentUser', this.currentUser);
+                }
+                
+                this.showNotification(`Club "${clubName}" deleted successfully`);
+                
+                // Refresh displays
+                this.renderHomepage();
+                if (document.getElementById('dashboard-section').style.display === 'block') {
+                    this.loadDashboard();
+                }
+                if (document.getElementById('admin-section').style.display === 'block') {
+                    this.loadAdminPanel();
+                }
+            }
+            
+            deleteEvent(eventId) {
+                if (!this.currentUser || (this.currentUser.role !== 'admin' && this.currentUser.id !== this.clubs.find(c => c.id === this.events.find(e => e.id === eventId).clubId).createdBy)) {
+                    this.showNotification('You do not have permission to delete this event', 'error');
+                    return;
+                }
+                
+                const eventIndex = this.events.findIndex(e => e.id === eventId);
+                if (eventIndex === -1) return;
+                
+                const eventName = this.events[eventIndex].name;
+                const clubId = this.events[eventIndex].clubId;
+                
+                // Remove event from all users' registered events
+                this.users.forEach(user => {
+                    user.registeredEvents = user.registeredEvents.filter(id => id !== eventId);
+                });
+                
+                // Remove the event
+                this.events.splice(eventIndex, 1);
+                
+                // Update club event count
+                const clubIndex = this.clubs.findIndex(c => c.id === clubId);
+                if (clubIndex !== -1) {
+                    this.clubs[clubIndex].events = Math.max(0, this.clubs[clubIndex].events - 1);
+                }
+                
+                // Update data
+                this.saveData('users', this.users);
+                this.saveData('clubs', this.clubs);
+                this.saveData('events', this.events);
+                
+                // Update current user if needed
+                if (this.currentUser) {
+                    this.currentUser.registeredEvents = this.currentUser.registeredEvents.filter(id => id !== eventId);
+                    this.saveData('currentUser', this.currentUser);
+                }
+                
+                this.showNotification(`Event "${eventName}" deleted successfully`);
+                
+                // Refresh displays
+                this.renderHomepage();
+                if (document.getElementById('dashboard-section').style.display === 'block') {
+                    this.loadDashboard();
+                }
+                if (document.getElementById('admin-section').style.display === 'block') {
+                    this.loadAdminPanel();
+                }
+            }
+            
+            deleteUser(userId) {
+                if (!this.currentUser || this.currentUser.role !== 'admin') {
+                    this.showNotification('Admin access required', 'error');
+                    return;
+                }
+                
+                const userIndex = this.users.findIndex(u => u.id === userId);
+                if (userIndex === -1) return;
+                
+                const userName = this.users[userIndex].name;
+                
+                // Remove user from clubs and events
+                this.users[userIndex].joinedClubs.forEach(clubId => {
+                    const clubIndex = this.clubs.findIndex(c => c.id === clubId);
+                    if (clubIndex !== -1) {
+                        this.clubs[clubIndex].members = Math.max(0, this.clubs[clubIndex].members - 1);
+                    }
+                });
+                
+                this.users[userIndex].registeredEvents.forEach(eventId => {
+                    const eventIndex = this.events.findIndex(e => e.id === eventId);
+                    if (eventIndex !== -1) {
+                        this.events[eventIndex].attendees = this.events[eventIndex].attendees.filter(id => id !== userId);
+                    }
+                });
+                
+                // Remove clubs created by this user
+                const userClubs = this.clubs.filter(c => c.createdBy === userId);
+                userClubs.forEach(club => {
+                    this.deleteClub(club.id);
+                });
+                
+                // Remove the user
+                this.users.splice(userIndex, 1);
+                
+                // Update data
+                this.saveData('users', this.users);
+                this.saveData('clubs', this.clubs);
+                this.saveData('events', this.events);
+                
+                this.showNotification(`User "${userName}" deleted successfully`);
+                
+                // Refresh admin panel
+                if (document.getElementById('admin-section').style.display === 'block') {
+                    this.loadAdminPanel();
+                }
+            }
+        }
+
+        // Initialize the app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            window.campusConnect = new CampusConnect();
+            
+            // Check if user is already logged in
+            if (window.campusConnect.currentUser) {
+                if (window.campusConnect.currentUser.role === 'admin') {
+                    document.getElementById('nav-admin').style.display = 'block';
+                }
+                window.campusConnect.showNotification(`Welcome back, ${window.campusConnect.currentUser.name}!`);
+            }
+        });
+    </script>
+</body>
+</html>
